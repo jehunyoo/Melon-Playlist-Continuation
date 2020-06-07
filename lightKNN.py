@@ -1,12 +1,13 @@
 import numpy as np
 import pandas as pd
+import os
 from tqdm import tqdm
 from collections import Counter
 
 
 class LightKNN:
     
-    def __init__(self, k, rho=0.4, sim="cosine", sim_normalize=False, verbose=True):
+    def __init__(self, k, rho=0.4, alpha=0.5, beta=0.5, sim="cosine", sim_normalize=False, verbose=True):
         
         self.id = None
         self.songs = None
@@ -18,6 +19,8 @@ class LightKNN:
         
         self.k = k
         self.rho = rho
+        self.alpha = alpha
+        self.beta = beta
 
         self.sim = sim
         self.sim_normalize = sim_normalize
@@ -40,9 +43,10 @@ class LightKNN:
                 self.freq[_songs] += 1
 
 
-    def predict(self, X, start=0, end=None):
+    def predict(self, X, start=0, end=None, auto_save=False, auto_save_step=500, auto_save_fname='auto_save'):
         '''
         X : pandas.DataFrame; columns=['id', 'songs', 'tags']
+        save_step : int
         returns : pandas.DataFrame; columns=['id', 'songs', 'tags']
         '''
         self.X_id = X['id']
@@ -51,10 +55,13 @@ class LightKNN:
         del X
 
         pred = []
-        V = [set(songs) for songs in self.songs]
+        V = [set(songs) for songs in self.songs] # list of list
+        W = [set(tags) for tags in self.tags]    # list of list
 
         if end:
             _range = tqdm(range(start, end)) if self.verbose else range(start, end)
+        elif start > 0 and end == None:
+            _range = tqdm(range(start, self.X_id.index.stop)) if self.verbose else range(start, self.X_id.index.stop)
         else:
             _range = tqdm(self.X_id.index) if self.verbose else self.X_id.index
         for uth in _range:
@@ -63,13 +70,23 @@ class LightKNN:
             t = set(self.X_tags[uth])
             k = self.k
 
-            S = np.array([self._sim(u, v) for v in V])
+            if len(u) == 0 or self.alpha == 0:
+                S = np.zeors(len(V))
+            else:
+                S = np.array([self._sim(u, v) for v in V])
+
+            if len(t) == 0 or self.beta == 0:
+                T = np.zeros(len(Y))
+            else:
+                T = np.array([self._sim(t, w) for w in W])
+            
+            Q = (self.alpha * S) + (self.beta * T)
 
             songs = set()
             tags = []
 
             while len(songs) < 100:
-                top = S.argsort()[-k:] # top k indicies of v == vth
+                top = Q.argsort()[-k:] # top k indicies of v == vth
 
                 _songs = []
                 _tags = []
@@ -85,9 +102,9 @@ class LightKNN:
                 if len(songs) < 100:
                     k += 100
             
-            norm = S[top].sum()
+            norm = Q[top].sum()
             if norm == 0:
-                norm = 1.0e+10
+                norm = 1.0e+10 # FIXME
             
             R = np.array([(song, np.sum([S[vth] if song in V[vth] else 0 for vth in top]) / norm) for song in songs])
             R = R[R[:, 1].argsort()][-100:][::-1]
@@ -99,6 +116,9 @@ class LightKNN:
                 "songs" : pred_songs,
                 "tags" : pred_tags
             })
+
+            if (auto_save == True) and (uth + 1 % auto_save_step == 0):
+                self._auto_save(pred, auto_save_fname)
         
         return pd.DataFrame(pred)
     
@@ -127,6 +147,12 @@ class LightKNN:
                     return 0
             else:
                 return freq.sum()
+    
+    def _auto_save(self, pred, auto_save_fname):
+        
+        if not os.path.isdir("./_temp"):
+            os.mkdir('./_temp')
+        pd.DataFrame(pred).to_json(f'_temp/{fname}.json', orient='records')
 
 
 if __name__=="__main__":
