@@ -6,8 +6,12 @@ from collections import Counter
 
 
 class LightKNN:
+
+    __version__ = "light-1.2"
     
-    def __init__(self, k, rho=0.4, alpha=0.5, beta=0.5, sim="cosine", sim_normalize=False, verbose=True):
+    def __init__(self, k, rho=0.4, alpha=0.5, beta=0.5, \
+                 sim_songs="cosine", sim_tags="cosine", \
+                 sim_normalize=False, verbose=True):
         
         self.id = None
         self.songs = None
@@ -15,17 +19,19 @@ class LightKNN:
         self.X_id = None
         self.X_songs = None
         self.X_tags = None
-        self.freq = None
+        self.freq_songs = None
+        self.freq_tags = None
         
         self.k = k
         self.rho = rho
         self.alpha = alpha
         self.beta = beta
 
-        self.sim = sim
+        self.sim_songs = sim_songs
+        self.sim_tags = sim_tags
         self.sim_normalize = sim_normalize
         self.verbose = verbose
-        self.__version__ = "light-1.0"
+        self.__version__ = LightKNN.__version__
 
     
     def fit(self, x):
@@ -36,11 +42,11 @@ class LightKNN:
         self.songs = x['songs']
         self.tags = x['tags']
         del x
-        if self.sim == "idf":
-            self.freq = np.zeros(707989, dtype=np.int64)
+        if self.sim_songs == "idf":
+            self.freq_songs = np.zeros(707989, dtype=np.int64)
             _playlist = tqdm(self.songs) if self.verbose else self.songs
             for _songs in _playlist:
-                self.freq[_songs] += 1
+                self.freq_songs[_songs] += 1
 
 
     def predict(self, X, start=0, end=None, auto_save=False, auto_save_step=500, auto_save_fname='auto_save'):
@@ -71,14 +77,14 @@ class LightKNN:
             k = self.k
 
             if len(u) == 0 or self.alpha == 0:
-                S = np.zeors(len(V))
+                S = np.zeros(len(V))
             else:
-                S = np.array([self._sim(u, v) for v in V])
+                S = np.array([self._sim(u, v, self.sim_songs, opt="songs") for v in V])
 
             if len(t) == 0 or self.beta == 0:
-                T = np.zeros(len(Y))
+                T = np.zeros(len(W))
             else:
-                T = np.array([self._sim(t, w) for w in W])
+                T = np.array([self._sim(t, w, self.sim_tags, opt="tags") for w in W])
             
             Q = (self.alpha * S) + (self.beta * T)
 
@@ -123,12 +129,12 @@ class LightKNN:
         return pd.DataFrame(pred)
     
 
-    def _sim(self, u, v):
+    def _sim(self, u, v, sim, opt):
         '''
         u : set (playlist in train data)
         v : set (playlist in test data)
         '''
-        if self.sim == "cosine":
+        if sim == "cosine":
             if self.sim_normalize:
                 try:
                     len(u & v) / ((len(u) ** 0.5) * (len(v) ** 0.5))
@@ -137,8 +143,12 @@ class LightKNN:
             else:
                 return len(u & v)
         
-        elif self.sim == "idf":
-            freq = self.freq[list(u & v)]
+        elif sim == "idf":
+            if opt == "songs":
+                freq = self.freq_songs
+            elif opt == "tags":
+                freq = self.freq_tags
+            freq = freq[list(u & v)]
             freq = 1 / (((freq - 1) ** self.rho) + 1) # numpy!
             if self.sim_normalize:
                 try:
