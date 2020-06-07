@@ -4,8 +4,10 @@ Team: Arena-UOS
 ### 2020-06-07
 
 Done
-- k=100, sim=cosine
-- k=100, rho=0.4, sim=idf
+- k=100, sim=cosine;<br>
+songs: 0.211465(12), tags: 0.372297(11), total: 0.235589(11)
+- k=100, rho=0.4, sim=idf;<br>
+songs: 0.239960(8), tags: 0.386446(11), total: 0.261933(7)
 
 To do
 - 태그 데이터에 명사로 된 태그, 타이틀에서 추출한 태그 추가하기
