@@ -12,6 +12,14 @@ class LightKNN:
     def __init__(self, k, rho=0.4, alpha=0.5, beta=0.5, \
                  sim_songs="cosine", sim_tags="cosine", \
                  sim_normalize=False, verbose=True):
+        '''
+        k : int
+        rho : float; 0.4(default) only for idf
+        alpha, beta : float; 0.5(default)
+        sim_songs, sim_tags : "cosine"(default), "idf", "jaccard"
+        sim_normalize : boolean; when sim == "cosine" or "idf"
+        verbose : boolean
+        '''
         
         self.id = None
         self.songs = None
@@ -52,9 +60,14 @@ class LightKNN:
     def predict(self, X, start=0, end=None, auto_save=False, auto_save_step=500, auto_save_fname='auto_save'):
         '''
         X : pandas.DataFrame; columns=['id', 'songs', 'tags']
-        save_step : int
+        start, end : (start, end>0) == range(start, end), (start>0, end=None) == range(start, end of X)
+                     (end = None) == all range of X
+        auto_save : boolean; False(default)
+        auto_save_step : int; 500(default)
+        auto_save_fname : string (without extension); 'auto_save'(default)
         returns : pandas.DataFrame; columns=['id', 'songs', 'tags']
         '''
+
         self.X_id = X['id']
         self.X_songs = X['songs']
         self.X_tags = X['tags']
@@ -133,7 +146,10 @@ class LightKNN:
         '''
         u : set (playlist in train data)
         v : set (playlist in test data)
+        sim : string; "cosine", "idf", "jaccard" (kind of similarity)
+        opt : string; "songs", "tags"
         '''
+
         if sim == "cosine":
             if self.sim_normalize:
                 try:
@@ -157,8 +173,15 @@ class LightKNN:
                     return 0
             else:
                 return freq.sum()
+        
+        elif sim == "jaccard":
+            return len(u & v) / len(u | v)
     
     def _auto_save(self, pred, auto_save_fname):
+        '''
+        pred : list of dictionaries
+        auto_save_fname : string
+        '''
         
         if not os.path.isdir("./_temp"):
             os.mkdir('./_temp')
