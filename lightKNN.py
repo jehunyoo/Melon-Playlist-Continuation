@@ -117,9 +117,8 @@ class LightKNN:
 
                 counts = Counter(_tags).most_common(30)
                 tags = [tag for tag, _ in counts if tag not in t]
-
-                if len(songs) < 100:
-                    k += 100
+                
+                k += 100
             
             norm = Q[top].sum()
             if norm == 0:
@@ -136,7 +135,7 @@ class LightKNN:
                 "tags" : pred_tags
             })
 
-            if (auto_save == True) and (uth + 1 % auto_save_step == 0):
+            if (auto_save == True) and ((uth + 1) % auto_save_step == 0):
                 self._auto_save(pred, auto_save_fname)
         
         return pd.DataFrame(pred)
@@ -185,7 +184,7 @@ class LightKNN:
         
         if not os.path.isdir("./_temp"):
             os.mkdir('./_temp')
-        pd.DataFrame(pred).to_json(f'_temp/{fname}.json', orient='records')
+        pd.DataFrame(pred).to_json(f'_temp/{auto_save_fname}.json', orient='records')
 
 
 if __name__=="__main__":
@@ -194,8 +193,10 @@ if __name__=="__main__":
         Xs = pickle.load(f)
     x = Xs[0]
     X = Xs[1]
+    XX = Xs[2]
 
-    knn = LightKNN(100, sim='idf')
+    knn = LightKNN(100, sim_songs='cosine', alpha=0.5, beta=0.5)
     knn.fit(x)
-    pred = knn.predict(X, end=1)
-    print(pred)
+    for i in [2948, 3312, 3908, 5452, 5474, 18110, 18638, 21410, 22189]:
+        pred = knn.predict(X, start=i, end=i+1)
+        print(i, pred)
