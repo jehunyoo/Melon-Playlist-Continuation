@@ -10,8 +10,6 @@ clean/
 idea.txt
 *.code-workspace
 .vscode
-### Team UOS ###
-naive_k-NN.ipynb
 ### Baseline Code ###
 arena_data
 arena_util.py
