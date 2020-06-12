@@ -4,10 +4,12 @@
 ### Project ###
 res/
 bin/
+submission/
+clean/
 ### JehunYoo ###
 idea.txt
 *.code-workspace
-KNN.py
+# KNN.py
 ### Team UOS ###
 naive_k-NN.ipynb
 ### Baseline Code ###
@@ -18,7 +20,7 @@ genre_most_popular.py
 most_popular.py
 split_data.py
 ### Kakao ###
-3_EDA.ipynb
+# 3_EDA.ipynb
 
 *.swp
 
