@@ -25,6 +25,7 @@ class SimKNN:
         self.verbose = verbose
         self.most = most
         self.debug = debug
+        self.__version__ = "1.0"
         self._checker()
 
 
@@ -39,20 +40,25 @@ class SimKNN:
             _data = tqdm(self.data) if self.verbose else self.data
             for datum in _data:
                 self.freq[datum] += 1
-            
 
 
-    def predict(self, X, generator=False, limit=None):
+
+    def predict(self, X, generator=False, limit=None, start=None, end=None):
         '''
-        X : pandas.DataFrame (columns=['id', 'songs'])
+        parameters \\
+            X : pandas.DataFrame (columns=['id', 'songs']) \\
+        returns \\
+            list
         '''
         self.X = X.iloc[:, 1].apply(np.array).to_numpy()
         self.X_id = X.iloc[:, 0].copy(); del X
-        
+
         pred = []
-        
+
         if type(limit) == int and limit > 0:
             _range = tqdm(range(limit)) if self.verbose else range(limit)
+        elif end:
+            _range = tqdm(range(start, end)) if self.verbose else range(start, end)
         else:
             _range = tqdm(range(self.X.size)) if self.verbose else range(self.X.size)
         for u in _range: # FIXME : double for loops -> numpy broadcasting?
@@ -68,7 +74,7 @@ class SimKNN:
             # L  r_u_hat / FIXME : double for loops
             # TODO : add weight
             del S, top, norm, tracks
-            
+
             r_u = r_u[r_u[:, 1].argsort()][::-1][:self.most]
 
             # yield u, r_u[:, 0].astype(np.int64), r_u[:, 1]
@@ -83,7 +89,9 @@ class SimKNN:
         u : int; u is index of playlist in test.json \\
         v : int; v is index of playlist in train.json
         '''
-        if self.metric == "cosine":
+        if self.X[u].size == 0:
+            return 0
+        elif self.metric == "cosine":
             u = self.X[u] # numpy array
             v = self.data[v] # numpy array
             return np.intersect1d(u, v).size / ((u.size ** 0.5) * (v.size ** 0.5))
@@ -149,3 +157,12 @@ class SimKNN:
             pass
         else:
             raise KeyError("invalid key : {}".format(self.weight))
+
+if __name__=='__main__':
+    import pickle
+    with open("bin/Xs.p", 'rb') as f:
+        Xs = pickle.load(f)
+    simknn = SimKNN(k=100, metric="idf")
+    simknn.fit(Xs[0][['id', 'songs']])
+    pred = simknn.predict(Xs[1][['id', 'songs']], limit=1)
+    print(pred)
