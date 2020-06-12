@@ -9,7 +9,7 @@ clean/
 ### JehunYoo ###
 idea.txt
 *.code-workspace
-# KNN.py
+.vscode
 ### Team UOS ###
 naive_k-NN.ipynb
 ### Baseline Code ###
