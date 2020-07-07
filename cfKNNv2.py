@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 class CFKNN:
 
-    __version__ = "CFKNN-2.1"
+    __version__ = "CFKNN-2.2"
 
     def __init__(self, k, pow_alpha, pow_beta, train=None, val=None, verbose=True):
         '''
@@ -78,11 +78,6 @@ class CFKNN:
             playlist_tags = set(self.val_tags[uth])
             playlist_size = len(playlist_songs)
 
-            track_feature = {track_i : {} for track_i in range(TOTAL_SONGS)}
-            # relevance = np.zeros((TOTAL_SONGS, 2))
-            relevance = np.concatenate((np.arange(TOTAL_SONGS).reshape(TOTAL_SONGS, 1), np.zeros((TOTAL_SONGS, 1))), axis=1)
-            k = self.k
-
             if len(playlist_songs) == 0:
                 pred.append({
                     "id" : int(self.val_id[uth]),
@@ -92,6 +87,11 @@ class CFKNN:
                 if (auto_save == True) and ((uth + 1) % auto_save_step == 0):
                     self._auto_save(pred, auto_save_fname)
                 continue
+
+            track_feature = {track_i : {} for track_i in range(TOTAL_SONGS)}
+            # relevance = np.zeros((TOTAL_SONGS, 2))
+            relevance = np.concatenate((np.arange(TOTAL_SONGS).reshape(TOTAL_SONGS, 1), np.zeros((TOTAL_SONGS, 1))), axis=1)
+            k = self.k
 
             # equation (6)
             for vth, vplaylist in enumerate(all_songs):
