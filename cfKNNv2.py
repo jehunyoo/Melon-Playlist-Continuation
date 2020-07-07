@@ -84,6 +84,13 @@ class CFKNN:
             k = self.k
 
             if len(playlist_songs) == 0:
+                pred.append({
+                    "id" : int(self.val_id[uth]),
+                    "songs" : [],
+                    "tags" : []
+                })
+                if (auto_save == True) and ((uth + 1) % auto_save_step == 0):
+                    self._auto_save(pred, auto_save_fname)
                 continue
 
             # equation (6)
