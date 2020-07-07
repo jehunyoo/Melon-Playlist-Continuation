@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 class CFKNN:
 
-    __version__ = "CFKNN-2.0"
+    __version__ = "CFKNN-2.1"
 
     def __init__(self, k, pow_alpha, pow_beta, train=None, val=None, verbose=True):
         '''
