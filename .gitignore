@@ -5,7 +5,8 @@
 res/
 bin/
 submission/
-clean/
+_temp/
+setup.py
 ### JehunYoo ###
 idea.txt
 *.code-workspace
