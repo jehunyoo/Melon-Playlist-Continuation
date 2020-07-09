@@ -6,11 +6,10 @@ from tqdm import tqdm
 
 class CFKNN:
 
-    __version__ = "CFKNN-2.2"
+    __version__ = "CFKNN-2.3"
 
-    def __init__(self, k, pow_alpha, pow_beta, train=None, val=None, verbose=True):
+    def __init__(self, pow_alpha, pow_beta, train=None, val=None, verbose=True):
         '''
-        k : int
         pow_alpha, pow_beta : float (0<= pow_alpha, pow_beta <= 1)
         train, val : pandas.DataFrame
         verbose : boolean
@@ -26,7 +25,6 @@ class CFKNN:
         self.val_tags = val["tags"]
         del val
 
-        self.k = k
         self.pow_alpha = pow_alpha
         self.pow_beta = pow_beta
 
@@ -48,8 +46,7 @@ class CFKNN:
 
     def predict(self, start=0, end=None, auto_save=False, auto_save_step=500, auto_save_fname='auto_save'):
         '''
-        start, end : (start, end>0) == range(start, end), (start>0, end=None) == range(start, end of X)
-                     (end = None) == all range of X
+        start, end : range(start, end). if end = None, range(start, end of val)
         auto_save : boolean; False(default)
         auto_save_step : int; 500(default)
         auto_save_fname : string (without extension); 'auto_save'(default)
@@ -58,10 +55,8 @@ class CFKNN:
 
         if end:
             _range = tqdm(range(start, end)) if self.verbose else range(start, end)
-        elif start > 0 and end == None:
+        elif end == None:
             _range = tqdm(range(start, self.val_id.index.stop)) if self.verbose else range(start, self.val_id.index.stop)
-        else:
-            _range = tqdm(self.val_id.index) if self.verbose else self.val_id.index
 
         pred = []
         all_songs = [set(songs) for songs in self.train_songs] # list of set
@@ -91,7 +86,6 @@ class CFKNN:
             track_feature = {track_i : {} for track_i in range(TOTAL_SONGS)}
             # relevance = np.zeros((TOTAL_SONGS, 2))
             relevance = np.concatenate((np.arange(TOTAL_SONGS).reshape(TOTAL_SONGS, 1), np.zeros((TOTAL_SONGS, 1))), axis=1)
-            k = self.k
 
             # equation (6)
             for vth, vplaylist in enumerate(all_songs):
@@ -161,5 +155,6 @@ if __name__=="__main__":
     # test = pd.read_json("res/test.json")
 
     # modeling
-    pred = CFKNN(k=100, pow_alpha=1, pow_beta=0.5, train=train, val=val).predict(end=10)
-    print(pred)
+    pred = CFKNN(pow_alpha=0.5, pow_beta=0.3, train=train, val=val).predict(end=20)
+    # print(pred)
+    pred.to_json('path/fname.json', orient='records')
