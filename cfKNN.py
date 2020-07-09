@@ -107,17 +107,6 @@ class CFKNN:
         
         return track_feature, track_feature_about_v
 
-    
-    def _feature_vector_product(self, v1, v2):
-        track_feature[track_i]
-        track_feature_about_v[track_i]
-        track_feature[track_j]
-        track_feature_about_v[track_j]
-        
-
-
-
-    
 
 
 if __name__=="__main__":
