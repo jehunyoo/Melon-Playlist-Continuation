@@ -1,8 +1,11 @@
 import numpy as np
 import pandas as pd
 import os
-from tqdm import tqdm
 from collections import Counter
+from warnings import warn
+
+warn("Unsupported module 'tqdm' is used.")
+from tqdm import tqdm
 
 
 class LightKNN:
