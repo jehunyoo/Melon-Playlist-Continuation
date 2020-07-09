@@ -42,7 +42,9 @@ class Neighbor:
         if not (0 <= self.pow_beta <= 1):
             raise ValueError('pow_beta is out of [0,1].')
 
-        freq_songs = np.zeros(707989, dtype=np.int64)
+        TOTAL_SONGS = 707989      # total number of songs
+
+        freq_songs = np.zeros(TOTAL_SONGS, dtype=np.int64)
         for _songs in self.train_songs:
             freq_songs[_songs] += 1
         
@@ -169,8 +171,9 @@ if __name__=="__main__":
 
     ### 3. range setting - Neighbor.predict()
     ### 3.1 range(start, end); if end == None, then range(start, end of val)
-    ### 3.2 return type of Neighbor.predict() : pandas.DataFrame
-    pred = Neighbor(pow_alpha=pow_alpha, pow_beta=pow_beta, train=train, val=val).predict(end=10)
+    ### 3.2 auto_save: boolean; False(default)
+    ### 3.3 return type of Neighbor.predict() : pandas.DataFrame
+    pred = Neighbor(pow_alpha=pow_alpha, pow_beta=pow_beta, train=train, val=val).predict(start=0, end=None, auto_save=False)
     # print(pred)
 
     ### 4. save data
