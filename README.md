@@ -3,8 +3,8 @@ Team: Arena-UOS
 
 ### Note
 
-lightKNN.py -> knn.py (light-1.2 -> knn-1.0)
-cfKNNv2.py -> neighbor.py (CFKNN-2.3 -> Neighbor-1.0)
+- lightKNN.py -> knn.py (light-1.2 -> knn-1.0)
+- cfKNNv2.py -> neighbor.py (CFKNN-2.3 -> Neighbor-1.0)
 
 ### 2020-06-07
 
