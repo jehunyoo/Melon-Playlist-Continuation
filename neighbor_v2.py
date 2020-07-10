@@ -203,6 +203,8 @@ if __name__=="__main__":
     # print(pred)
 
     ### 4. save data
+    version = Neighbor.__version__
+    version = version[version.find('-') + 1: version.find('.')]
     path = "."
-    fname = f"neighbor_a{int(pow_alpha * 10)}b{int(pow_beta * 10)}"
+    fname = f"neighbor{version}_a{int(pow_alpha * 10)}b{int(pow_beta * 10)}"
     pred.to_json(f'{path}/{fname}.json', orient='records')

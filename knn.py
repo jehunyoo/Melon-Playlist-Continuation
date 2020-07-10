@@ -215,10 +215,11 @@ if __name__=="__main__":
     # print(pred)
 
     ### 4. save data
+    version = KNN.__version__
+    version = version[version.find('-') + 1: version.find('.')]
     path = "."
-    fname = f"knn_k{k}rho{int(rho * 10)}a{int(alpha * 10)}b{int(beta * 10)}_{sim_songs}{sim_tags}{sim_normalize}"
+    fname = f"knn{version}_k{k}rho{int(rho * 10)}a{int(alpha * 10)}b{int(beta * 10)}_{sim_songs}{sim_tags}{sim_normalize}"
     pred.to_json(f'{path}/{fname}.json', orient='records')
-
 
 
     # import pickle

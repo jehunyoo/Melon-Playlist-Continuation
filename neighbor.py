@@ -7,6 +7,9 @@ warn("Unsupported module 'tqdm' is used.")
 from tqdm import tqdm
 
 class Neighbor:
+    '''
+    Neighbor-based Collaborative Filtering
+    '''
 
     __version__ = "Neighbor-1.0"
 
@@ -167,7 +170,7 @@ if __name__=="__main__":
     ### 2. modeling
     ### 2.1 hyperparameters: pow_alpha, pow_beta
     pow_alpha = 0.5
-    pow_beta = 0.3
+    pow_beta = 0.1
 
     ### 3. range setting - Neighbor.predict()
     ### 3.1 range(start, end); if end == None, then range(start, end of val)
@@ -177,6 +180,8 @@ if __name__=="__main__":
     # print(pred)
 
     ### 4. save data
+    version = Neighbor.__version__
+    version = version[version.find('-') + 1: version.find('.')]
     path = "."
-    fname = f"neighbor_a{int(pow_alpha * 10)}b{int(pow_beta * 10)}"
+    fname = f"neighbor{version}_a{int(pow_alpha * 10)}b{int(pow_beta * 10)}"
     pred.to_json(f'{path}/{fname}.json', orient='records')
