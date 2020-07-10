@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import os
-from datetime import datetime
 from warnings import warn
 
 warn("Unsupported module 'tqdm' is used.")
