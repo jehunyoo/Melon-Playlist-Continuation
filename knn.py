@@ -195,8 +195,8 @@ if __name__=="__main__":
     # test = pd.read_json("res/test.json")
 
     ### 2. modeling
-    ### 2.1 hyperparameter: k, rho, alpha, beta
-    ### 2.2 variables: sim_songs, sim_tags, sim_normalize
+    ### 2.1 hyperparameters: k, rho, alpha, beta
+    ### 2.2 parameters: sim_songs, sim_tags, sim_normalize
     k = 100
     rho = 0.4
     alpha = 0.5

@@ -165,7 +165,7 @@ if __name__=="__main__":
     # test = pd.read_json("res/test.json")
 
     ### 2. modeling
-    ### 2.1 hyperparameter: pow_alpha, pow_beta
+    ### 2.1 hyperparameters: pow_alpha, pow_beta
     pow_alpha = 0.5
     pow_beta = 0.3
 
