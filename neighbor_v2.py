@@ -24,18 +24,18 @@ class Neighbor:
         version_check : boolean; True(default)
         '''
 
-        self.train_id = train["id"]
-        self.train_songs = train["songs"]
-        self.train_tags = train["tags"]
+        self.train_id = train["id"].copy()
+        self.train_songs = train["songs"].copy()
+        self.train_tags = train["tags"].copy()
         del train
 
-        self.val_id = val["id"]
-        self.val_songs = val["songs"]
-        self.val_tags = val["tags"]
-        self.val_updt_date = val["updt_date"]
+        self.val_id = val["id"].copy()
+        self.val_songs = val["songs"].copy()
+        self.val_tags = val["tags"].copy()
+        self.val_updt_date = val["updt_date"].copy()
         del val
 
-        self.song_meta_issue_date = song_meta["issue_date"]
+        self.song_meta_issue_date = song_meta["issue_date"].copy()
         del song_meta
 
         self.pow_alpha = pow_alpha

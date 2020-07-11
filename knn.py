@@ -23,14 +23,14 @@ class KNN:
         sim_normalize : boolean; when sim == "cos" or "idf"
         verbose : boolean
         '''
-        self.train_id = train["id"]
-        self.train_songs = train["songs"]
-        self.train_tags = train["tags"]
+        self.train_id = train["id"].copy()
+        self.train_songs = train["songs"].copy()
+        self.train_tags = train["tags"].copy()
         del train
 
-        self.val_id = val["id"]
-        self.val_songs = val["songs"]
-        self.val_tags = val["tags"]
+        self.val_id = val["id"].copy()
+        self.val_songs = val["songs"].copy()
+        self.val_tags = val["tags"].copy()
         del val
 
         self.freq_songs = None
