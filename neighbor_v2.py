@@ -13,7 +13,7 @@ class Neighbor:
       + date checking
     '''
 
-    __version__ = "Neighbor-2.0"
+    __version__ = "Neighbor-2.1"
 
     def __init__(self, pow_alpha, pow_beta, train=None, val=None, song_meta=None, \
                  verbose=True, version_check=True):

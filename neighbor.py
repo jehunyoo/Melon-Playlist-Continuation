@@ -11,7 +11,7 @@ class Neighbor:
     Neighbor-based Collaborative Filtering
     '''
 
-    __version__ = "Neighbor-1.0"
+    __version__ = "Neighbor-1.1"
 
     def __init__(self, pow_alpha, pow_beta, train=None, val=None, verbose=True, version_check=True):
         '''

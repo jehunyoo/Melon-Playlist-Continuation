@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 class KNN:
 
-    __version__ = "KNN-1.0"
+    __version__ = "KNN-1.1"
     
     def __init__(self, k, rho=0.4, alpha=0.5, beta=0.5, \
                  sim_songs="cos", sim_tags="cos", sim_normalize=False, \
