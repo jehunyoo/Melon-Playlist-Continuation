@@ -126,8 +126,8 @@ class Neighbor:
 
                     relevance[track_i, 1] = (1 / playlist_size) * sum_of_sim
             
-            # select top 100
-            relevance = relevance[relevance[:, 1].argsort()][-100:][::-1]
+            # select top 10
+            relevance = relevance[relevance[:, 1].argsort()][-10:][::-1]
             pred_tags = relevance[:, 0].astype(np.int64).tolist()
             pred.append({
                 "id" : int(self.val_id[uth]),
