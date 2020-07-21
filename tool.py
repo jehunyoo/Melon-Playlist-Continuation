@@ -163,6 +163,23 @@ def we_numbering(data, start=0, verbose=True, limit=None, return_inverse=False):
         return words
 
 
+def n_gram(n, data):
+    dct = {}
+    for key, title in data.items():
+        bag = []
+        for pos in range(len(title) - n + 1):
+            bag.append(title[pos: pos + n])
+        dct[key] = bag
+    return dct
+
+
+def n_gram_sentence(n, sentence):
+    bag = []
+    for pos in range(len(sentence) - n + 1):
+        bag.append(sentence[pos: pos + n])
+    return bag
+
+
 if __name__=="__main__":
     # train = pd.read_json("res/train.json")[["id", "plylst_title", "songs", "tags", "like_cnt", "updt_date"]]
     # a, b, c, d = extract_playlist_from(train, dtype="str", dense=True, limit=100)
