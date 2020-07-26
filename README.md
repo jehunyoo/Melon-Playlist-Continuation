@@ -1,7 +1,11 @@
-# [Melon Playlist Continuation](https://arena.kakao.com/c/7)
+# Melon Playlist Continuation
 
-### Overview
-Neighbor-based Collaborative Filtering
+## Overview
+[Melon Playlist Continuation](https://arena.kakao.com/c/7) is hosted by [kakao arena](https://arena.kakao.com/).<br>
+Neighbor-based collaborative filtering was used.<br>
+In master branch, the source codes are final version of model and our all commits & trials are in develop branch.
+
+For more specific ideas, please check [my blog](https://jehunyoo.github.io/projects/melon-playlist-continuation).
 
 ### Usage
 ```bash
