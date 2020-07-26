@@ -5,12 +5,16 @@
 Neighbor-based collaborative filtering was used.<br>
 In master branch, the source codes are final version of model and our all commits & trials are in develop branch.
 
+You can download data from [here](https://arena.kakao.com/c/7/data) only for academical purpose and make sure that you quote **kakao arena**.
+
 For more specific ideas, please check [my blog](https://jehunyoo.github.io/projects/melon-playlist-continuation).
 
 ### Usage
 ```bash
 $ python inference.py
 ```
+
+We assumed that data is in `res/`.
 
 ### References
 - [[Paper]](https://eprints.sztaki.hu/9560/1/Kelen_1_30347064_ny.pdf) [[Code]](https://github.com/proto-n/recsys-challenge-2018) Efficient K-NN for Playlist Continuation (RecSys'18 Challenge)
