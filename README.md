@@ -7,7 +7,7 @@ In master branch, the source codes are final version of model and our all commit
 
 You can download data from [here](https://arena.kakao.com/c/7/data) only for academical purpose and make sure that you quote **kakao arena**.
 
-For more specific ideas, please check [my blog](https://jehunyoo.github.io/projects/melon-playlist-continuation).
+For more specific ideas, please visit [my blog](https://jehunyoo.github.io/projects/melon-playlist-continuation).
 
 ### Usage
 ```bash
