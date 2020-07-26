@@ -113,7 +113,7 @@ class KNN:
                 for vth in top:
                     _songs += self.train_songs[vth]
                     _tags += self.train_tags[vth]
-                songs = set(_songs) - playlist_tags
+                songs = set(_songs) - playlist_songs
 
                 counts = Counter(_tags).most_common(30)
                 tags = [tag for tag, _ in counts if tag not in playlist_tags]
@@ -124,6 +124,7 @@ class KNN:
             if norm == 0:
                 norm = 1.0e+10 # FIXME
             
+            # TODO: simSongs ??
             relevance = np.array([(song, np.sum([simSongs[vth] if song in all_songs[vth] else 0 for vth in top]) / norm) for song in songs])
             relevance = relevance[relevance[:, 1].argsort()][-100:][::-1]
             pred_songs = relevance[:, 0].astype(np.int64).tolist()
