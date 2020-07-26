@@ -6,6 +6,7 @@ res/
 bin/
 submission/
 clean/
+_temp/
 ### JehunYoo ###
 idea.txt
 *.code-workspace
