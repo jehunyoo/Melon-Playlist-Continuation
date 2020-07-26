@@ -97,6 +97,8 @@ class NeighborKNN:
         # TODO: Remove unsupported module 'tqdm'.
         if end:
             _range = tqdm(range(start, end)) if self.verbose else range(start, end)
+        elif type(start) == type([]):
+            _range = tqdm(start) if self.verbose else start
         elif end == None:
             _range = tqdm(range(start, self.val_id.index.stop)) if self.verbose else range(start, self.val_id.index.stop)
 
@@ -127,6 +129,12 @@ class NeighborKNN:
                         _songs += self.train_songs[vth]
                     songs = set(_songs)
 
+                    date_check = []
+                    for track_i in songs:
+                        if self.song_meta_issue_date[track_i] <= playlist_updt_date:
+                            date_check.append(track_i)
+                    songs = set(date_check)
+
                     k += 100
                 
                 norm = simTags[top].sum()
@@ -134,16 +142,16 @@ class NeighborKNN:
                     norm = 1.0e+10 # FIXME
             
                 relevance = np.array([(song, np.sum([simTags[vth] if song in all_songs[vth] else 0 for vth in top]) / norm) for song in songs])
-                relevance = relevance[relevance[:, 1].argsort()][::-1]
+                relevance = relevance[relevance[:, 1].argsort()][-100:][::-1]
                 sorted_songs = relevance[:, 0].astype(np.int64).tolist()
-                pred_songs = []
+                pred_songs = sorted_songs
 
-                # check if issue_date of songs is earlier than updt_date of playlist
-                for track_i in sorted_songs:
-                    if self.song_meta_issue_date[track_i] <= playlist_updt_date:
-                        pred_songs.append(track_i)
-                        if len(pred_songs) == 100:
-                            break
+                # # check if issue_date of songs is earlier than updt_date of playlist
+                # for track_i in sorted_songs:
+                #     if self.song_meta_issue_date[track_i] <= playlist_updt_date:
+                #         pred_songs.append(track_i)
+                #         if len(pred_songs) == 100:
+                #             break
 
                 pred.append({
                 "id" : int(self.val_id[uth]),

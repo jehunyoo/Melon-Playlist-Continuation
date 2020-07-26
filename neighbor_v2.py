@@ -19,7 +19,7 @@ class Neighbor:
                  verbose=True, version_check=True):
         '''
         pow_alpha, pow_beta : float (0<= pow_alpha, pow_beta <= 1)
-        train, val : pandas.DataFrame
+        train, val, song_meta : pandas.DataFrame
         verbose : boolean; True(default)
         version_check : boolean; True(default)
         '''

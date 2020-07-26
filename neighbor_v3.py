@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
-from data_util import *
+from data_util import tag_id_meta
 from warnings import warn
 
 warn("Unsupported module 'tqdm' is used.")
@@ -28,13 +28,6 @@ class Neighbor:
         version_check : boolean; True(default)
         '''
         ### 1. data sets
-        ### 1.1 convert tag to tag_id
-        tag_to_id, id_to_tag = tag_id_meta(train, val)
-        train = convert_tag_to_id(train, tag_to_id)
-        val   = convert_tag_to_id(val  , tag_to_id)
-        self._id_to_tag = id_to_tag
-
-        ### 1.2
         self.train_id = train["id"].copy()
         self.train_songs = train["songs"].copy()
         self.train_tags = train["tags"].copy()
@@ -58,6 +51,8 @@ class Neighbor:
             raise ValueError('pow_alpha is out of [0,1].')
         if not (0 <= self.pow_beta <= 1):
             raise ValueError('pow_beta is out of [0,1].')
+
+        _, id_to_tag = tag_id_meta(train, val)
 
         TOTAL_SONGS = song_meta.shape[0]     # total number of songs
         TOTAL_TAGS  = len(id_to_tag.keys())  # total number of tags
@@ -235,11 +230,7 @@ class Neighbor:
             if (auto_save == True) and ((uth + 1) % auto_save_step == 0):
                 self._auto_save(pred, auto_save_fname)
 
-        ### convert tag_id to tag
-        pred = pd.DataFrame(pred)
-        pred = convert_id_to_tag(pred, self._id_to_tag)
-
-        return pred
+        return pd.DataFrame(pred)
 
     def _inner_product_feature_vector(self, v1, v2):
         '''
@@ -263,11 +254,17 @@ class Neighbor:
 
 if __name__=="__main__":
 
+    from data_util import *
+
     ### 1. load data
     song_meta = pd.read_json("res/song_meta.json")
     train = pd.read_json("res/train.json")
     val = pd.read_json("res/val.json")
     # test = pd.read_json("res/test.json")
+
+    tag_to_id, id_to_tag = tag_id_meta(train, val)
+    train = convert_tag_to_id(train, tag_to_id)
+    val   = convert_tag_to_id(val  , tag_to_id)
 
     ### 2. modeling
     ### 2.1 hyperparameters: pow_alpha, pow_beta
@@ -280,7 +277,8 @@ if __name__=="__main__":
     ### 3.3 return type of Neighbor.predict() : pandas.DataFrame
     pred = Neighbor(pow_alpha=pow_alpha, pow_beta=pow_beta, \
                     train=train, val=val, song_meta=song_meta).predict(start=0, end=10, auto_save=False)
-    # print(pred)
+    pred = convert_id_to_tag(pred, id_to_tag)
+    print(pred)
 
     ### 4. save data
     version = Neighbor.__version__

@@ -193,6 +193,6 @@ if __name__=="__main__":
     ### 6. save data
     version = Neighbor.__version__
     version = version[version.find('-') + 1: version.find('.')]
-    path = "submission/neighbor-tag_beta1_a5b1"
+    path = "."
     fname = f"neighbor{version}_a{int(pow_alpha * 10)}b{int(pow_beta * 10)}"
     pred.to_json(f'{path}/{fname}.json', orient='records')
