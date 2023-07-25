@@ -42,6 +42,6 @@ We assumed that data is in `res/`.
 Leaderboard | Score | Song nDCG | Tag nDCG
 ---|:---:|:---:|:---:
 Public | 0.327719 (10) | 0.302484 (11) | 0.470715 (18)
-Final | ? (?) | ? (?) | ? (?)
+Final | 0.33084 (11) | 0.307122 (?) | 0.465247 (?)
 
 &#8594; [Leaderboard](https://arena.kakao.com/c/7/leaderboard)
